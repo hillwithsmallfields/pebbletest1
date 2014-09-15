@@ -25,6 +25,22 @@ static uint16_t menu_get_num_sections_callback(MenuLayer *menu_layer, void *data
   return NUM_MENU_SECTIONS;
 }
 
+static char *entries[] = {
+        "aleph", "bet", "gimel", "daleth", NULL
+};
+
+static char *entry_line(int index) {
+    return entries[index];
+}
+
+static int count_entries() {
+    int i;
+    for (i = 0; entries[i] != NULL; i++) {
+//             nothing to do here
+    }
+    return i;
+}
+
 // Each section has a number of items;  we use a callback to specify this
 // You can also dynamically add and remove items using this
 static uint16_t menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t section_index, void *data) {
@@ -33,7 +49,7 @@ static uint16_t menu_get_num_rows_callback(MenuLayer *menu_layer, uint16_t secti
       return NUM_FIRST_MENU_ITEMS;
 
     case 1:
-      return NUM_SECOND_MENU_ITEMS;
+      return count_entries();
 
     default:
       return 0;
@@ -88,12 +104,8 @@ static void menu_draw_row_callback(GContext* ctx, const Layer *cell_layer, MenuI
       break;
 
     case 1:
-      switch (cell_index->row) {
-        case 0:
-          // There is title draw for something more simple than a basic menu item
-          menu_cell_title_draw(ctx, cell_layer, "Final Item");
+          menu_cell_title_draw(ctx, cell_layer, entry_line(cell_index->row));
           break;
-      }
   }
 }
 
