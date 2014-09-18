@@ -40,6 +40,9 @@ allocate_storage(int alloc_lines, int alloc_bytes)
   allocated_lines = alloc_lines;
   byte_fill = bytes = (char*)malloc(alloc_bytes + 1);
   last_char = bytes + alloc_bytes;
+    if ((lines == NULL) || (bytes == NULL)) {
+//         todo: some kind of error handling here
+    }
 }
 
 static char*
