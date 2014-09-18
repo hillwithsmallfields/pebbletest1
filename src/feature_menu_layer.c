@@ -48,7 +48,7 @@ entry_line(int index)
   if (allocated_lines == 0) {
     return "Nothing loaded";
   }
-  return entries[index];
+  return lines[index];
 }
 
 static int

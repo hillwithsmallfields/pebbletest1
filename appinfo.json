@@ -9,13 +9,8 @@
     "resources": {
         "media": [
             {
-                "file": "images/brains_watch_background.png",
-                "name": "IMAGE_BACKGROUND_BRAINS",
-                "type": "png"
-            },
-            {
-                "file": "images/menu_icon_binary_watch.png",
-                "name": "IMAGE_MENU_ICON_BINARY_WATCH",
+                "file": "images/menu_icon_big_watch.png",
+                "name": "IMAGE_MENU_ICON_BIG_WATCH",
                 "type": "png"
             },
             {
@@ -24,8 +19,13 @@
                 "type": "png"
             },
             {
-                "file": "images/menu_icon_big_watch.png",
-                "name": "IMAGE_MENU_ICON_BIG_WATCH",
+                "file": "images/menu_icon_binary_watch.png",
+                "name": "IMAGE_MENU_ICON_BINARY_WATCH",
+                "type": "png"
+            },
+            {
+                "file": "images/brains_watch_background.png",
+                "name": "IMAGE_BACKGROUND_BRAINS",
                 "type": "png"
             }
         ]
