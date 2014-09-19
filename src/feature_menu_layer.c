@@ -2,18 +2,29 @@
 
 static Window *window;
 
-// This is a menu layer
-// You have more control than with a simple menu layer
 static MenuLayer *menu_layer;
 
-// A callback is used to specify the amount of sections of menu items
-// With this, you can dynamically add and remove sections
 static uint16_t
 menu_get_num_sections_callback(MenuLayer *menu_layer,
 			       void *data) 
 {
   return 1;
 }
+
+/* A rudimentary collection of "lines" of text.  Each one is
+ * null-terminated, and they shouldn't have a newline or carriage
+ * return.  They're stored in a common buffer, pointed to by `bytes'
+ * and with `byte_fill' pointing where the next line should be
+ * added. `last_char' is the limit of allocation.
+ *
+ * The line starts are pointed to by elements of the array `lines',
+ * for which `allocated_lines' gives the maximum size, and
+ * `available_lines' gives the number that have actually been filled
+ * in.  Lines can be added using the function `add_line'.
+ *
+ * Both these structures are created by `allocate_storage'.
+ */
+
 static char **lines = NULL;
 static int allocated_lines = 0;
 static int available_lines = 0;
@@ -36,8 +47,14 @@ add_line(char *line)
 static void
 allocate_storage(int alloc_lines, int alloc_bytes)
 {
+  if (lines != NULL) {
+    free(lines);
+  }
   lines = (char**)malloc(alloc_lines * sizeof(char*));
   allocated_lines = alloc_lines;
+  if (bytes != NULL) {
+    free(bytes);
+  }
   byte_fill = bytes = (char*)malloc(alloc_bytes + 1);
   last_char = bytes + alloc_bytes;
     if ((lines == NULL) || (bytes == NULL)) {
@@ -50,6 +67,9 @@ entry_line(int index)
 {
   if (allocated_lines == 0) {
     return "Nothing loaded";
+  }
+  if (index >= allocated_lines) {
+    return "Fallen off end of array!";
   }
   return lines[index];
 }
@@ -64,8 +84,6 @@ count_entries()
   return available_lines;
 }
 
-// Each section has a number of items;  we use a callback to specify this
-// You can also dynamically add and remove items using this
 static uint16_t
 menu_get_num_rows_callback(MenuLayer *menu_layer,
 			   uint16_t section_index,
@@ -81,7 +99,7 @@ menu_get_header_height_callback(MenuLayer *menu_layer,
 				void *data)
 {
   // This is a define provided in pebble.h that you may use for the default height
-  /* todo: make this lower */
+  /* todo: make this lower; perhaps calculate from the font metrics */
   return MENU_CELL_BASIC_HEADER_HEIGHT;
 }
 
@@ -112,6 +130,8 @@ menu_select_callback(MenuLayer *menu_layer,
 			  void *data)
 {
   // Use the row to specify which item will receive the select action
+  /* todo: try it out the following, to set the title to the selected entry */
+  menu_cell_basic_header_draw(ctx, cell_layer, entry_line(cell_index->row));
 #if 0
   switch (cell_index->row) {
     // This is the menu item with the cycling icon
@@ -153,6 +173,8 @@ window_load(Window *window)
 
   // Add it to the window for display
   layer_add_child(window_layer, menu_layer_get_layer(menu_layer));
+
+  /* todo: fetch the menu data from the phone. */
 }
 
 static void
