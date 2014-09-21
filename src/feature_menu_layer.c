@@ -97,7 +97,6 @@ entry_line(int index)
 static int
 count_entries()
 {
-  int i;
   if (allocated_lines == 0) {
     return 1;			/* one fake entry to say nothing is loaded */
   }
@@ -225,12 +224,15 @@ menu_draw_row_callback(GContext* ctx,
 // Here we capture when a user selects a menu item
 static void
 menu_select_callback(MenuLayer *menu_layer,
-			  MenuIndex *cell_index,
-			  void *data)
+		     MenuIndex *cell_index,
+		     void *data)
 {
   // Use the row to specify which item will receive the select action
+#if 0
   /* todo: try it out the following, to set the title to the selected entry */
+  /* fixme: ctx isn't available here, neither is cell_layer */
   menu_cell_basic_header_draw(ctx, cell_layer, entry_line(cell_index->row));
+#endif
 #if 0
   switch (cell_index->row) {
     // This is the menu item with the cycling icon
