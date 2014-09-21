@@ -1,9 +1,14 @@
 {
-    "appKeys": {},
+    "appKeys": {  "setSpace":  0,
+		  "setLines": 1,
+		  "lineIndex": 2,
+		  "lineText": 3,
+		  "allDone", 4
+	       },
     "capabilities": [
         ""
     ],
-    "companyName": "jcg.sturdy@gmail.com",
+    "companyName": "Categorical Imperative",
     "longName": "MenuTest1",
     "projectType": "native",
     "resources": {
