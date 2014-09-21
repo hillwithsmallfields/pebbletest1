@@ -10,6 +10,8 @@ static Window *window;
 
 static MenuLayer *menu_layer;
 
+/* todo: use size_t heap_bytes_free(void) to see how much we can allocate */
+
 static uint16_t
 menu_get_num_sections_callback(MenuLayer *menu_layer,
 			       void *data) 
