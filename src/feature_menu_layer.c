@@ -157,6 +157,8 @@ inbox_received_callback(DictionaryIterator *iterator, void *context)
     t = dict_read_next(iterator);
   }
 
+  APP_LOG(APP_LOG_LEVEL_INFO, "End of message %d %d %d %p", n_chars, n_lines, line_index, line_text);
+#if 0
   /* Having got all the keys, act on the message */
   if ((n_chars > 0) && (n_lines > 0)) {
     allocate_storage(n_lines, n_chars);
@@ -164,6 +166,7 @@ inbox_received_callback(DictionaryIterator *iterator, void *context)
   if ((line_index > 0) && (line_text != NULL)) {
     add_line(line_index, line_text);
   }
+#endif
 }
 
 static void inbox_dropped_callback(AppMessageResult reason, void *context) {

@@ -29,7 +29,7 @@ function sendLineFailed(e)
 
 function sendLine(line_index)
 {
-    var send_data =  { "lineIndex": line_index, "lineText": lines[line_index] }
+    var send_data =  { "lineIndex": line_index, "lineText": lines[line_index] };
     var transactionId = Pebble.sendAppMessage(send_data, sendLineSucceeded, sendLineFailed);
 }
 
@@ -44,12 +44,18 @@ function responder(e) {
     console.log("Received message: " + e.payload);
     // todo: switch on message type, which can be a request for data, or a change of status
     if (next_line < 0) {
-        Pebble.sendAppMessage({"setSpace": char_count, "setLines": line_count})
+        console.log("Sending sizes chars=" + char_count + "; lines=" + line_count);
+        Pebble.sendAppMessage({"setSpace": char_count, "setLines": line_count});
 	next_line = 0;
     } else {
-	if (lines[next_line]) {
-	    sendLine(next_line++);
-	}
+        console.log("considering next line which is line " + next_line);
+	    if (lines[next_line]) {
+            console.log("sending next line which is line " + next_line);
+	        sendLine(next_line++);
+	} else {
+    console.log("marking end of file");
+        Pebble.sendAppMessage({"allDone": 1});
+    }
     }
 }
 
