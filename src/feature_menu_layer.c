@@ -1,5 +1,11 @@
 #include "pebble.h"
 
+#define KEY_SET_SPACE 0
+#define KEY_SET_LINES 1
+#define KEY_LINEINDEX 2
+#define KEY_LINETEXT 3
+#define KEY_ALL_DONE 4
+
 static Window *window;
 
 static MenuLayer *menu_layer;
@@ -32,15 +38,24 @@ static char *bytes = NULL;
 static char *byte_fill = NULL;
 static char *last_char = NULL;
 
+static int got_all_lines = 0;
+
+
 static void
-add_line(char *line)
+add_line(int line_index, char *line)
 {
   int len = strlen(line);
+  if ((lines == NULL) || (bytes == NULL)) {
+    return;
+  }
   if ((byte_fill + len) >= last_char) {
     return;
   }
   strcpy(byte_fill, line);
-  lines[available_lines++] = byte_fill;
+  lines[line_index] = byte_fill;
+  if (line_index > available_lines) {
+    available_lines = line_index + 1;
+  }
   byte_fill += (len + 1);
 }
 
@@ -71,6 +86,9 @@ entry_line(int index)
   if (index >= allocated_lines) {
     return "Fallen off end of array!";
   }
+  if (lines[index] == NULL) {
+    return "Empty entry!";
+  }
   return lines[index];
 }
 
@@ -82,6 +100,85 @@ count_entries()
     return 1;			/* one fake entry to say nothing is loaded */
   }
   return available_lines;
+}
+
+static void
+prod_phone(uint8_t key, uint8_t cmd)
+{
+  DictionaryIterator *iter;
+  app_message_outbox_begin(&iter);
+ 
+  Tuplet value = TupletInteger(key, cmd);
+  dict_write_tuplet(iter, &value);
+ 
+  app_message_outbox_send();
+}
+
+static void
+inbox_received_callback(DictionaryIterator *iterator, void *context)
+{
+  // Read first item
+  Tuple *t = dict_read_first(iterator);
+  int line_index = -1;
+  int n_chars = -1;
+  int n_lines = -1;
+  char *line_text = NULL;
+
+  while (t != NULL) {
+    // Which key was received?
+    switch (t->key) {
+    case KEY_SET_SPACE:
+      n_chars = t->value->int32;
+      break;
+
+    case KEY_SET_LINES:
+      n_lines = t->value->int32;
+      break;
+
+    case KEY_LINEINDEX:
+      line_index = t->value->int32;
+      break;
+
+    case KEY_LINETEXT:
+      line_text = t->value->cstring;
+      break;
+
+    case KEY_ALL_DONE:
+      got_all_lines = 1;
+      break;
+
+    default:
+      APP_LOG(APP_LOG_LEVEL_ERROR, "Key %d not recognized!", (int)t->key);
+      break;
+    }
+
+    // Look for next item
+    t = dict_read_next(iterator);
+  }
+
+  /* Having got all the keys, act on the message */
+  if ((n_chars > 0) && (n_lines > 0)) {
+    allocate_storage(n_lines, n_chars);
+  }
+  if ((line_index > 0) && (line_text != NULL)) {
+    add_line(line_index, line_text);
+  }
+}
+
+static void inbox_dropped_callback(AppMessageResult reason, void *context) {
+  APP_LOG(APP_LOG_LEVEL_ERROR, "Message dropped!");
+}
+
+static void
+outbox_failed_callback(DictionaryIterator *iterator, AppMessageResult reason, void *context)
+{
+  APP_LOG(APP_LOG_LEVEL_ERROR, "Outbox send failed!");
+}
+
+static void
+outbox_sent_callback(DictionaryIterator *iterator, void *context)
+{
+  APP_LOG(APP_LOG_LEVEL_INFO, "Outbox send success!");
 }
 
 static uint16_t
@@ -196,10 +293,21 @@ main(void)
 
   window_stack_push(window, true /* Animated */);
 
+  app_message_register_inbox_received(inbox_received_callback);
+  app_message_register_inbox_dropped(inbox_dropped_callback);
+  app_message_register_outbox_failed(outbox_failed_callback);
+  app_message_register_outbox_sent(outbox_sent_callback);
+
+  app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
+
   allocate_storage(3, 16);
-  add_line("foo");
-  add_line("bar");
-  add_line("baz");
+  add_line(0, "foo");
+  add_line(1, "bar");
+  add_line(2, "baz");
+
+  while (!got_all_lines) {
+    prod_phone(0, 0);
+  }
 
   app_event_loop();
 
