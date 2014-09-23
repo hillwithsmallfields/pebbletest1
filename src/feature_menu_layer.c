@@ -212,7 +212,9 @@ menu_draw_header_callback(GContext* ctx,
 			  uint16_t section_index,
 			  void *data)
 {
-  menu_cell_basic_header_draw(ctx, cell_layer, "Some example items");
+  char buf[32];
+  snprintf(buf, 32, "%d example items", available_lines);
+  menu_cell_basic_header_draw(ctx, cell_layer, buf);
 }
 
 // This is the menu item draw callback where you specify what each item should look like
