@@ -300,21 +300,25 @@ main(void)
 
   window_stack_push(window, true /* Animated */);
 
+#if 0
   app_message_register_inbox_received(inbox_received_callback);
   app_message_register_inbox_dropped(inbox_dropped_callback);
   app_message_register_outbox_failed(outbox_failed_callback);
   app_message_register_outbox_sent(outbox_sent_callback);
 
   app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
+#endif
 
   allocate_storage(3, 16);
   add_line(0, "foo");
   add_line(1, "bar");
   add_line(2, "baz");
 
+#if 0
   while (!got_all_lines) {
     prod_phone(0, 0);
   }
+#endif
 
   app_event_loop();
 
