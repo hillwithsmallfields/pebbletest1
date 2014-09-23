@@ -55,7 +55,7 @@ add_line(int line_index, char *line)
   }
   strcpy(byte_fill, line);
   lines[line_index] = byte_fill;
-  if (line_index > available_lines) {
+  if (line_index >= available_lines) {
     available_lines = line_index + 1;
   }
   byte_fill += (len + 1);
@@ -69,6 +69,7 @@ allocate_storage(int alloc_lines, int alloc_bytes)
   }
   lines = (char**)malloc(alloc_lines * sizeof(char*));
   allocated_lines = alloc_lines;
+  available_lines = 0;
   if (bytes != NULL) {
     free(bytes);
   }
@@ -309,10 +310,13 @@ main(void)
   app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 #endif
 
-  allocate_storage(3, 16);
+  allocate_storage(16, 64);
   add_line(0, "foo");
   add_line(1, "bar");
   add_line(2, "baz");
+  add_line(3, "wiz");
+  add_line(4, "zap");
+  add_line(5, "pow");
 
 #if 0
   while (!got_all_lines) {
