@@ -50,7 +50,7 @@ function responder(e) {
         console.log("Sending sizes chars=" + charCount + "; lines=" + lineCount);
         Pebble.sendAppMessage({"setSpace": charCount, "setLines": lineCount});
         nextLine = 0;
-    } else {
+    } else if (nextLine < lines.length()){
         console.log("sending next line which is line " + nextLine);
 	sendLine(nextLine);
         nextLine += 1;
