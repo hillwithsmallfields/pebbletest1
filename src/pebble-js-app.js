@@ -51,15 +51,12 @@ function responder(e) {
         Pebble.sendAppMessage({"setSpace": charCount, "setLines": lineCount});
         nextLine = 0;
     } else {
-        console.log("considering next line which is line " + nextLine);
-	    if (lines[nextLine]) {
-            console.log("sending next line which is line " + nextLine);
-	        sendLine(nextLine);
-            nextLine++
-	} else {
-    console.log("marking end of file");
+        console.log("sending next line which is line " + nextLine);
+	sendLine(nextLine);
+        nextLine++
+    } else {
+	console.log("marking end of file");
         Pebble.sendAppMessage({"allDone": 1});
-    }
     }
 }
 
