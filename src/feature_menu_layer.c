@@ -213,7 +213,7 @@ menu_draw_header_callback(GContext* ctx,
 			  void *data)
 {
   char buf[32];
-  snprintf(buf, 32, "%d example items", available_lines);
+  snprintf(buf, 32, "%d items; %d bytes", available_lines, heap_bytes_free());
   menu_cell_basic_header_draw(ctx, cell_layer, buf);
 }
 
@@ -301,7 +301,7 @@ main(void)
 	.unload = window_unload,
 	});
 
-  allocate_storage(16, 128);
+  allocate_storage(16, 4096);
   add_line(0, "preload one");
   add_line(1, "preload two");
   add_line(2, "preload three");
@@ -311,7 +311,7 @@ main(void)
 
   window_stack_push(window, true /* Animated */);
 
-#if 0
+#if 1
   app_message_register_inbox_received(inbox_received_callback);
   app_message_register_inbox_dropped(inbox_dropped_callback);
   app_message_register_outbox_failed(outbox_failed_callback);
@@ -320,10 +320,11 @@ main(void)
   app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 #endif
 
-#if 0
-  add_line(0, "preload seven");
-  add_line(1, "preload eight");
-  add_line(2, "preload nine");
+#if 1
+  add_line(6, "preload seven");
+  add_line(7, "preload eight");
+  add_line(8, "preload nine");
+
   menu_layer_reload_data(menu_layer);
 #endif
 
