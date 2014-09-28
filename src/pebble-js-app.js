@@ -1,6 +1,8 @@
-var next_line = -1;
-var char_count = 1024;
-var line_count = 16;
+var nextLine = 0;
+var charCount = 1024;
+var lineCount = 16;
+
+var last_id = 0;
 
 var lines = [
     "a haon",
@@ -31,6 +33,7 @@ function sendLine(line_index)
 {
     var send_data =  { "lineIndex": line_index, "lineText": lines[line_index] };
     var transactionId = Pebble.sendAppMessage(send_data, sendLineSucceeded, sendLineFailed);
+    last_id = transactionId;
 }
 
 function initializer(e) 
@@ -43,15 +46,16 @@ function initializer(e)
 function responder(e) {
     console.log("Received message: " + e.payload);
     // todo: switch on message type, which can be a request for data, or a change of status
-    if (next_line < 0) {
-        console.log("Sending sizes chars=" + char_count + "; lines=" + line_count);
-        Pebble.sendAppMessage({"setSpace": char_count, "setLines": line_count});
-	next_line = 0;
+    if (nextLine < 0) {
+        console.log("Sending sizes chars=" + charCount + "; lines=" + lineCount);
+        Pebble.sendAppMessage({"setSpace": charCount, "setLines": lineCount});
+        nextLine = 0;
     } else {
-        console.log("considering next line which is line " + next_line);
-	    if (lines[next_line]) {
-            console.log("sending next line which is line " + next_line);
-	        sendLine(next_line++);
+        console.log("considering next line which is line " + nextLine);
+	    if (lines[nextLine]) {
+            console.log("sending next line which is line " + nextLine);
+	        sendLine(nextLine);
+            nextLine++
 	} else {
     console.log("marking end of file");
         Pebble.sendAppMessage({"allDone": 1});
