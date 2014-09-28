@@ -76,9 +76,9 @@ allocate_storage(int alloc_lines, int alloc_bytes)
   }
   byte_fill = bytes = (char*)malloc(alloc_bytes + 1);
   last_char = bytes + alloc_bytes;
-    if ((lines == NULL) || (bytes == NULL)) {
-//         todo: some kind of error handling here
-    }
+  if ((lines == NULL) || (bytes == NULL)) {
+    //         todo: some kind of error handling here
+  }
   menu_layer_reload_data(menu_layer);
 }
 
@@ -174,7 +174,9 @@ inbox_received_callback(DictionaryIterator *iterator, void *context)
 #endif
 }
 
-static void inbox_dropped_callback(AppMessageResult reason, void *context) {
+static void
+inbox_dropped_callback(AppMessageResult reason, void *context)
+{
   APP_LOG(APP_LOG_LEVEL_ERROR, "Message dropped!");
 }
 
@@ -305,7 +307,7 @@ main(void)
 	.unload = window_unload,
 	});
  
-    window_stack_push(window, true /* Animated */);
+  window_stack_push(window, true /* Animated */);
 
   allocate_storage(16, 4096);
   add_line(0, "preload one");
