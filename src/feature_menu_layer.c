@@ -343,7 +343,6 @@ main(void)
 #endif
 
 #if 1
-  /* This gets a "failed to send" message in the logs */
     prod_phone(0, 0);
     prod_phone(0, 0);
     prod_phone(0, 0);
