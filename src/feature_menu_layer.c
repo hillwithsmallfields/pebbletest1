@@ -301,6 +301,14 @@ main(void)
 	.unload = window_unload,
 	});
 
+  allocate_storage(16, 128);
+  add_line(0, "preload one");
+  add_line(1, "preload two");
+  add_line(2, "preload three");
+  add_line(3, "preload four");
+  add_line(4, "preload five");
+  add_line(5, "preload six");
+
   window_stack_push(window, true /* Animated */);
 
 #if 0
@@ -312,13 +320,12 @@ main(void)
   app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 #endif
 
-  allocate_storage(16, 64);
-  add_line(0, "foo");
-  add_line(1, "bar");
-  add_line(2, "baz");
-  add_line(3, "wiz");
-  add_line(4, "zap");
-  add_line(5, "pow");
+#if 0
+  add_line(0, "preload seven");
+  add_line(1, "preload eight");
+  add_line(2, "preload nine");
+  menu_layer_reload_data(menu_layer);
+#endif
 
 #if 0
   while (!got_all_lines) {
