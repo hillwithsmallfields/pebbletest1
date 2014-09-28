@@ -59,6 +59,7 @@ add_line(int line_index, char *line)
     available_lines = line_index + 1;
   }
   byte_fill += (len + 1);
+  menu_layer_reload_data(menu_layer);
 }
 
 static void
@@ -78,6 +79,7 @@ allocate_storage(int alloc_lines, int alloc_bytes)
     if ((lines == NULL) || (bytes == NULL)) {
 //         todo: some kind of error handling here
     }
+  menu_layer_reload_data(menu_layer);
 }
 
 static char*
@@ -107,6 +109,7 @@ count_entries()
 static void
 prod_phone(uint8_t key, uint8_t cmd)
 {
+#if 0
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
  
@@ -114,6 +117,7 @@ prod_phone(uint8_t key, uint8_t cmd)
   dict_write_tuplet(iter, &value);
  
   app_message_outbox_send();
+#endif
 }
 
 static void
@@ -159,7 +163,7 @@ inbox_received_callback(DictionaryIterator *iterator, void *context)
   }
 
   APP_LOG(APP_LOG_LEVEL_INFO, "End of message %d %d %d %p", n_chars, n_lines, line_index, line_text);
-#if 0
+#if 1
   /* Having got all the keys, act on the message */
   if ((n_chars > 0) && (n_lines > 0)) {
     allocate_storage(n_lines, n_chars);
@@ -300,6 +304,8 @@ main(void)
       .load = window_load,
 	.unload = window_unload,
 	});
+ 
+    window_stack_push(window, true /* Animated */);
 
   allocate_storage(16, 4096);
   add_line(0, "preload one");
@@ -309,8 +315,7 @@ main(void)
   add_line(4, "preload five");
   add_line(5, "preload six");
 
-  window_stack_push(window, true /* Animated */);
-
+ 
 #if 1
   app_message_register_inbox_received(inbox_received_callback);
   app_message_register_inbox_dropped(inbox_dropped_callback);
@@ -324,8 +329,9 @@ main(void)
   add_line(6, "preload seven");
   add_line(7, "preload eight");
   add_line(8, "preload nine");
-
-  menu_layer_reload_data(menu_layer);
+  add_line(9, "preload ten");
+  add_line(10, "preload eleven");
+  add_line(11, "preload twelve");
 #endif
 
 #if 0
