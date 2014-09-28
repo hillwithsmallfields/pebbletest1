@@ -53,7 +53,7 @@ function responder(e) {
     } else {
         console.log("sending next line which is line " + nextLine);
 	sendLine(nextLine);
-        nextLine++
+        nextLine += 1;
     } else {
 	console.log("marking end of file");
         Pebble.sendAppMessage({"allDone": 1});
