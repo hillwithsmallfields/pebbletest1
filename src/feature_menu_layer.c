@@ -109,7 +109,7 @@ count_entries()
 static void
 prod_phone(uint8_t key, uint8_t cmd)
 {
-#if 0
+#if 1
   DictionaryIterator *iter;
   app_message_outbox_begin(&iter);
  
@@ -338,6 +338,12 @@ main(void)
   while (!got_all_lines) {
     prod_phone(0, 0);
   }
+#endif
+
+#if 1
+    prod_phone(0, 0);
+    prod_phone(0, 0);
+    prod_phone(0, 0);
 #endif
 
   app_event_loop();
