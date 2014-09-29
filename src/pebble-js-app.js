@@ -19,25 +19,21 @@ var lines = [
     "do dheag"
 ];
 
-function sendLineSucceeded(e)
-{
+function sendLineSucceeded(e) {
     console.log("Successfully delivered message with transactionId=" + e.data.transactionId);
 }
 
-function sendLineFailed(e)
-{
+function sendLineFailed(e) {
     console.log("Unable to deliver message with transactionId=" + e.data.transactionId + " Error is: " + e.error.message);
 }
 
-function sendLine(line_index)
-{
+function sendLine(line_index) {
     var send_data =  { "lineIndex": line_index, "lineText": lines[line_index] };
     var transactionId = Pebble.sendAppMessage(send_data, sendLineSucceeded, sendLineFailed);
     last_id = transactionId;
 }
 
-function initializer(e) 
-{
+function initializer(e) {
     // all initialization to be done in here
     // todo: load lines from file
     console.log("JavaScript menutest1 app ready and running; Lines: " + lines.length);
@@ -45,23 +41,24 @@ function initializer(e)
 
 function responder(e) {
     console.log("menutest1 responder called");
-    if (e.payload.command != null) {
-	console.log("Received message with command: " + e.payload.command);
-	// todo: switch on message type, which can be a request for data, or a change of status
-	if (nextLine < 0) {
+    if (e.payload.command !== null) {
+        console.log("Received message with command: " + e.payload.command);
+        // todo: switch on message type, which can be a request for data, or a change of status
+        if (nextLine < 0) {
             console.log("Sending sizes chars=" + charCount + "; lines=" + lineCount);
             Pebble.sendAppMessage({"setSpace": charCount, "setLines": lineCount});
             nextLine = 0;
-	} else if (nextLine < lines.length){
+        } else if (nextLine < lines.length){
             console.log("sending next line which is line " + nextLine);
-	        sendLine(nextLine);
+            sendLine(nextLine);
             nextLine += 1;
-	} else {
-	        console.log("marking end of file");
+        } else {
+            console.log("marking end of file");
             Pebble.sendAppMessage({"allDone": 1});
-	}
+        }
     } else {
-	// appMessageQueue.clear();
+        console.log("Received message without command");
+        // appMessageQueue.clear(); // where is this defined?
     }
 }
 
