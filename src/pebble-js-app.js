@@ -58,7 +58,8 @@ function responder(e) {
         }
     } else {
         console.log("Received message without command");
-        // appMessageQueue.clear(); // where is this defined?
+        /// appMessageQueue.clear(); // where is this defined?
+        Pebble.sendAppMessage({"huh": 1});
     }
 }
 
