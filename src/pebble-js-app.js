@@ -44,7 +44,7 @@ function initializer(e)
 }
 
 function responder(e) {
-    console.log("menutest1 responder called")
+    console.log("menutest1 responder called");
     if (e.payload.command != null) {
 	console.log("Received message with command: " + e.payload.command);
 	// todo: switch on message type, which can be a request for data, or a change of status
@@ -54,14 +54,14 @@ function responder(e) {
             nextLine = 0;
 	} else if (nextLine < lines.length){
             console.log("sending next line which is line " + nextLine);
-	    sendLine(nextLine);
+	        sendLine(nextLine);
             nextLine += 1;
 	} else {
-	    console.log("marking end of file");
+	        console.log("marking end of file");
             Pebble.sendAppMessage({"allDone": 1});
 	}
     } else {
-	appMessageQueue.clear();
+	// appMessageQueue.clear();
     }
 }
 
