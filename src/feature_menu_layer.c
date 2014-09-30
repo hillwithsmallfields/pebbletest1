@@ -362,11 +362,11 @@ main(void)
 
 #if 1
     APP_LOG(APP_LOG_LEVEL_INFO, "About to prod phone");
-    prod_phone(0, 0);
+    prod_phone(1, 2);
     APP_LOG(APP_LOG_LEVEL_INFO, "Prodded once");
-    prod_phone(0, 0);
+    prod_phone(3, 4);
     APP_LOG(APP_LOG_LEVEL_INFO, "Prodded again");
-    prod_phone(0, 0);
+    prod_phone(5, 6);
     APP_LOG(APP_LOG_LEVEL_INFO, "Prodded yet again");
 #endif
 
