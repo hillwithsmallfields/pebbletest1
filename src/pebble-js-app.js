@@ -27,8 +27,8 @@ function sendLineFailed(e) {
     console.log("Unable to deliver message with transactionId=" + e.data.transactionId + " Error is: " + e.error.message);
 }
 
-function sendLine(line_index) {
-    var send_data =  { "lineIndex": line_index, "lineText": lines[line_index] };
+function sendLine(lineIndex) {
+    var send_data =  { "lineIndex": lineIndex, "lineText": lines[lineIndex] };
     var transactionId = Pebble.sendAppMessage(send_data, sendLineSucceeded, sendLineFailed);
     last_id = transactionId;
 }
@@ -61,6 +61,7 @@ function responder(e) {
     //     /// appMessageQueue.clear(); // where is this defined?
     //     Pebble.sendAppMessage({"huh": 1});
     // }
+    Pebble.sendAppMessage({"placeholder": 1});
 }
 
 Pebble.addEventListener("ready", initializer);
