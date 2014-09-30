@@ -340,23 +340,19 @@ main(void)
   add_line(5, "preload six");
 
  
-#if 1
   app_message_register_inbox_received(inbox_received_callback);
   app_message_register_inbox_dropped(inbox_dropped_callback);
   app_message_register_outbox_failed(outbox_failed_callback);
   app_message_register_outbox_sent(outbox_sent_callback);
 
   app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
-#endif
 
-#if 1
   add_line(6, "preload seven");
   add_line(7, "preload eight");
   add_line(8, "preload nine");
   add_line(9, "preload ten");
   add_line(10, "preload eleven");
   add_line(11, "preload twelve");
-#endif
 
 #if 0
   while (!got_all_lines) {
@@ -365,9 +361,13 @@ main(void)
 #endif
 
 #if 1
+    APP_LOG(APP_LOG_LEVEL_INFO, "About to prod phone");
     prod_phone(0, 0);
+    APP_LOG(APP_LOG_LEVEL_INFO, "Prodded once");
     prod_phone(0, 0);
+    APP_LOG(APP_LOG_LEVEL_INFO, "Prodded again");
     prod_phone(0, 0);
+    APP_LOG(APP_LOG_LEVEL_INFO, "Prodded yet again");
 #endif
 
   app_event_loop();
